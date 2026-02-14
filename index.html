@@ -123,7 +123,7 @@ video {
 }
 
 .polaroid-frame::after {
-    content: "Our Memories 💜";
+    content: "";
     display: block;
     text-align: center;
     margin-top: 10px;
@@ -200,7 +200,7 @@ function showSurprise() {
 
 /* Reveal Next button safely */
 video.addEventListener("timeupdate", () => {
-    if (video.currentTime >= 5) {
+    if (video.currentTime >= 10) {
         nextBtn.style.display = "block";
     }
 });
