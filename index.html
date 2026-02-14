@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Surprise 💜</title>
+
+<style>
+
+/* ===== GLOBAL PAGE ===== */
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ===== FLOATING HEARTS ===== */
+.heart {
+    position: absolute;
+    color: rgba(255,255,255,0.5);
+    animation: float 6s linear infinite;
+    font-size: 18px;
+}
+@keyframes float {
+    0% { transform: translateY(100vh); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(-10vh); opacity: 0; }
+}
+
+/* ===== FIRST BUTTON ===== */
+.first-btn {
+    padding: 18px 50px;
+    font-size: 22px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(45deg, #ff758c, #ff4d6d);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 8px 30px rgba(255, 80, 120, 0.6);
+    animation: pulse 2s infinite ease-in-out;
+}
+@keyframes pulse {
+    50% { transform: scale(1.07); }
+}
+
+/* ===== VIDEO PAGE ===== */
+.video-page {
+    position: fixed;
+    inset: 0;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.5s;
+}
+.video-page.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.video-wrapper {
+    width: 60%;
+    max-width: 700px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(150, 0, 255, 0.5);
+}
+
+video {
+    width: 100%;
+    display: block;
+}
+
+/* ===== BUTTONS ===== */
+.next-btn, .third-btn {
+    position: absolute;
+    bottom: 30px;
+    left: 20px;
+    padding: 12px 26px;
+    border-radius: 20px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.next-btn {
+    background: pink;
+    display: none;
+}
+
+.third-btn {
+    background: transparent;
+    border: 2px dashed white;
+    color: white;
+}
+
+/* ===== THIRD PAGE BACKGROUND ===== */
+#thirdPage {
+    background: linear-gradient(135deg, #7b2ff7, #f107a3);
+}
+
+/* ===== POLAROID ===== */
+.polaroid-frame {
+    width: 320px;
+    background: white;
+    padding: 15px 15px 55px;
+    border-radius: 10px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.35);
+    transform: rotate(-3deg);
+}
+
+.polaroid-frame video {
+    border-radius: 6px;
+}
+
+.polaroid-frame::after {
+    content: "Our Memories 💜";
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<button class="first-btn" onclick="showSurprise()">💗 Pa Open Fuuu 💗</button>
+
+<!-- SECOND PAGE -->
+<div class="video-page" id="videoPage">
+    <div class="video-wrapper">
+        <video id="surpriseVideo" playsinline loop muted>
+            <source src="FLOWERS.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <button id="nextBtn" class="next-btn" onclick="showThirdPage()">Next Surprise</button>
+
+    <audio id="bgAudio" loop>
+        <source src="SARANGGOLA MUSIC.mp3" type="audio/mpeg">
+    </audio>
+</div>
+
+<!-- THIRD PAGE -->
+<div class="video-page" id="thirdPage">
+    <div class="polaroid-frame">
+        <video id="thirdVideo" playsinline loop muted>
+            <source src="MEMORIES.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <button class="third-btn" onclick="backToVideoPage()">Go Back</button>
+
+    <audio id="thirdAudio" loop>
+        <source src="HEART_MUSIC.mp3" type="audio/mpeg">
+    </audio>
+</div>
+
+<script>
+
+/* Floating hearts */
+for (let i = 0; i < 20; i++) {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+    document.body.appendChild(heart);
+}
+
+const video = document.getElementById("surpriseVideo");
+const thirdVideo = document.getElementById("thirdVideo");
+const nextBtn = document.getElementById("nextBtn");
+
+/* Ensure videos are loaded */
+video.load();
+thirdVideo.load();
+
+/* Show second page */
+function showSurprise() {
+    document.querySelector(".first-btn").style.display = "none";
+    document.getElementById("videoPage").classList.add("active");
+
+    video.currentTime = 0;
+    video.play().catch(err => console.log("Video play error:", err));
+
+    document.getElementById("bgAudio").play().catch(()=>{});
+}
+
+/* Reveal Next button safely */
+video.addEventListener("timeupdate", () => {
+    if (video.currentTime >= 5) {
+        nextBtn.style.display = "block";
+    }
+});
+
+/* Show third page */
+function showThirdPage() {
+    document.getElementById("videoPage").classList.remove("active");
+    document.getElementById("thirdPage").classList.add("active");
+
+    thirdVideo.currentTime = 0;
+    thirdVideo.play().catch(err => console.log("Third video error:", err));
+
+    document.getElementById("thirdAudio").play().catch(()=>{});
+}
+
+/* Back */
+function backToVideoPage() {
+    document.getElementById("thirdPage").classList.remove("active");
+    document.getElementById("videoPage").classList.add("active");
+
+    thirdVideo.pause();
+    document.getElementById("thirdAudio").pause();
+
+    video.play().catch(()=>{});
+    document.getElementById("bgAudio").play().catch(()=>{});
+}
+
+</script>
+
+</body>
+</html>
